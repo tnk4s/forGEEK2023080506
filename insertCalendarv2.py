@@ -98,10 +98,10 @@ class InsertCalendarv2:
             if self.rs[task][3] == 0:
                 self.num_tasks_list.append(1)
                 # 新規タスク0，元々あるタスク1
-                if self.rs[task][4] != "None":
-                    self.exist_plan_list2.append(1)
-                else:
+                if self.rs[task][4] is None:
                     self.exist_plan_list2.append(0)
+                else:
+                    self.exist_plan_list2.append(1)
 
                 num += 1
             else:
@@ -127,7 +127,7 @@ class InsertCalendarv2:
             buf = 0
             if i == 0:
                 while buf < self.num_tasks_list[num]:
-                    n = np.random.randint(0, self.exist_plan_list)
+                    n = np.random.randint(0, self.exist_plan_list[num])
                     if self.base_table[num][n] == 0:
                         self.base_table[num][n] = 1
                         buf += 1
@@ -180,3 +180,10 @@ class InsertCalendarv2:
 
 if __name__ == "__main__":
     ins = InsertCalendarv2(res=15)
+    #x = ins.generate_plan()
+    #xx = 0
+    #for i in range(2):
+    #    for j in range(1020):
+    #        if x[i][j] == 1:
+    #            xx += 1
+    #print(xx)
