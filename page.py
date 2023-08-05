@@ -8,6 +8,7 @@ class Page:
         self.last_x = None
         self.last_y = None
         self.my_values = None
+        self.outputs = None
 
         self.break_flag = "BREAK"
         self.stable_flag = "STABLE"
@@ -27,6 +28,9 @@ class Page:
                 self.window.UnHide()   
         else:
             self.__set_window(init_x, init_y)
+    
+    def receive_inputs(self, input_datas):
+        pass
 
 
     def loop_funcs(self):
@@ -60,3 +64,6 @@ class Page:
 
     def get_next_page_names(self):
         return self.next_page_names
+    
+    def get_outputs(self):
+        return self.outputs

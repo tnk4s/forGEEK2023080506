@@ -21,6 +21,7 @@ if __name__ == "__main__":
         #elif not next_page == window.get_stable_flag():
         elif next_page in window.get_next_page_names():
             x, y = window.get_last_xy()
+            outputs = window.get_outputs()
             window = pages[next_page]
             window.wake_up_window(x, y)
         
