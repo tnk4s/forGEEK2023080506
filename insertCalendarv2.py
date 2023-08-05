@@ -132,6 +132,14 @@ class InsertCalendarv2:
                         self.base_table[num][n] = 1
                         buf += 1
             num += 1
+        #kd = self.base_table * self.kiso_table_exist
+        #dsa = 0
+        #for i in range(2):
+        #    for j in range(1020):
+        #        if kd[i][j] == 1:
+        #            print(i)
+        #            dsa += 1
+        #print(dsa)
         return self.base_table
 
     def table_fix(self, base_table: np.ndarray):
@@ -174,7 +182,7 @@ class InsertCalendarv2:
                         buf += 1
         return base_table
 
-    def kiso_table(self):
+    def kiso_table_2(self):
         return self.kiso_table_exist, self.earliest
 
 
@@ -187,3 +195,4 @@ if __name__ == "__main__":
     #        if x[i][j] == 1:
     #            xx += 1
     #print(xx)
+
