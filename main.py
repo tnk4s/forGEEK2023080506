@@ -23,6 +23,7 @@ if __name__ == "__main__":
             x, y = window.get_last_xy()
             outputs = window.get_outputs()
             window = pages[next_page]
+            window.receive_inputs(outputs)
             window.wake_up_window(x, y)
         
         elif next_page == window.get_stable_flag():
