@@ -14,11 +14,12 @@ class OneDayPlanPage(Page):
         self.db_system = MySchedule()
         self.this_layout = [
             [sg.Text(self.page_name)],
-            [sg.Text('日付入力'), sg.Input(key='DATE'), sg.Button('送信', key = self.submit_button_func), sg.Button('終了', key = self.go_back)], 
+            [sg.Text('日付入力'), sg.Input(key='-DATE-'), sg.Button('送信', key = self.submit_button_func), sg.Button('終了', key = self.go_back)], 
             [sg.Table(self.schedule, headings=header, key='table')]
         ]
     
-    def submit_button_func(self, do_date):
+    def submit_button_func(self):
+        do_date = self.my_values['-DATE-']
         df = self.db_system.get_shcs('Alice', do_date=f"'{do_date}'")
         schedule = df.values.tolist()
         self.window['table'].update(values=schedule)
