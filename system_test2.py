@@ -4,16 +4,27 @@ from decimal import Decimal
 import numpy as np
 from itertools import zip_longest
 
-def Yutarou(x):
+def Yutarou():
     z = np.random.randint(0, 2, (5, 3, 3))
 
     return z
+
+def ActiveTime():
+    y = np.random.randint(0, 2, 3)
+
+    return y
+
+def PreSch():
+    z = np.random.randint(0, 2, (5,3,3))
+
 
 #Yutarou(5)
 
 class Algo:
     def __init__(self):
-        self.gene = Yutarou(5) # ゆうたろうから受け取った配列
+        self.gene = Yutarou() # ゆうたろうから受け取った配列
+        self.presch = PreSch()
+        self.AT = ActiveTime()
         self.selected = []
         self.children = []
         self.mutation_ratio = 0.1
@@ -21,7 +32,10 @@ class Algo:
         self.worst = []
 
     def get_fitness(self):
-        fitness = self.gene.sum(axis=(1,2))
+        extended = np.tile(self.AT, (5,3,1))
+        adama1 = extended * self.gene
+        adama2 = self.presch * self.gene
+        fitness = adama.sum(axis=(1,2)) + adama2.sum(axis=(1,2))
         return fitness
 
     def mutate(self):
