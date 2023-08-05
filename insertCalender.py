@@ -1,13 +1,13 @@
 import datetime
-
 import pandas as pd
 from datetime import date
 
 import my_schedule as ms
+from raise_Error_list import TimeError
 
 
 class InsertCalender:
-    def __init__(self, task_name: str, difficulty: int, due_date: str):
+    def __init__(self, task_name: str, difficulty: int, due_date: str, now_time: datetime):
         # インスタンスの作成およびテーブルデータの取得
         self.db_system = ms.MySchedule()
         rs = self.db_system.get_shcs("Alice")
@@ -15,6 +15,7 @@ class InsertCalender:
         due_dateset = pd.DataFrame(rs["due_date"]).to_numpy()
         due_dateset = tuple(map(tuple, due_dateset))
         self.due_dateset = tuple(tuple(dates)[0] for dates in due_dateset)
+        #print(self.rs)
 
         # 変数の定義
         self.task_name = task_name
@@ -24,11 +25,13 @@ class InsertCalender:
         self.max_diff = 5
         self.exist_diff = None
         self.date_total_diff = {}
+        self.now_time = date.fromisoformat(now_time)
 
         self.task_list = [
             "Alice", self.task_name, date.fromisoformat("2013-01-01"), date.fromisoformat(self.due_date), "detail",
             self.difficulty
         ]
+
 
         # 関数呼び出し
         self.cul_diff()
@@ -54,12 +57,16 @@ class InsertCalender:
         flag = True
         prev_1day = datetime.timedelta(days=1)
 
+        if date.fromisoformat(self.due_date) < self.now_time:
+            raise TimeError
+
+
+
         # 予定がなかったらそのまま予定代入
         if self.due_date not in self.due_dateset:
-            self.db_system.insert_sch(self.task_list)
+            self.db_system.insert_sch([self.task_list])
         else:
             while flag:
-
                 # 日付ごとの難易度を取得
                 if self.due_date in self.date_total_diff:
                     diff_cul = self.date_total_diff[self.due_date]
@@ -77,8 +84,12 @@ class InsertCalender:
                 else:
                     self.due_date = date.fromisoformat(self.due_date)
                     self.due_date = self.due_date - prev_1day
+                    if self.due_date < self.now_time:
+                        raise TimeError
+                        flag = False
+
                     self.due_date = str(self.due_date)
 
 
 if __name__ == "__main__":
-    ins = InsertCalender(task_name="task111", difficulty=4, due_date="2024-01-01")
+    ins = InsertCalender(task_name="task119", difficulty=4, due_date="2001-12-01", now_time="2019-12-30")
