@@ -30,6 +30,14 @@ class InputFormPage(Page):
         print(self.my_values['detail']+'\n')
         print(str(self.my_values['time'])+'\n')
         print(nowtime.isoformat())
+
+        self.outputs = {
+            "user" : self.my_values['user'],
+            "name" : self.my_values['name'],
+            "hizuke":hizuke.isoformat(), 
+            "detail" : self.my_values['detail'],
+            "time" : str(self.my_values['time'])
+        }
         
         self.window['user'].update('')
         self.window['name'].update('')
