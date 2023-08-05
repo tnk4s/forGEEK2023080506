@@ -37,6 +37,8 @@ class InsertCalendarv2:
             else:
                 earliest = earliest.replace(year=earliest.year+1, month=1, hour=0, minute=0)
 
+        self.earliest = earliest
+
         # タスクの締め切り日時取得
         self.duetimelist = []
         self.duetimelist2 = []
@@ -171,6 +173,9 @@ class InsertCalendarv2:
                                     buf += 1
                         buf += 1
         return base_table
+
+    def kiso_table(self):
+        return self.kiso_table_exist, self.earliest
 
 
 if __name__ == "__main__":
