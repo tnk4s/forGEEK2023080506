@@ -32,7 +32,7 @@ class Algo:
         self.gene = tmp
 
     def cross(self):
-
+        
 
     def select(self, gene):
         self.selected = []
@@ -50,9 +50,9 @@ class Algo:
 
     def solve(self, gene):
         for i in range(num_of_gene):
-            best_one = max(get_fitness())
+            best_one = max(gene, key=get_fitness())
             self.best.append()
-            worst_one = min(get_fitness())
+            worst_one = min(gene, key=get_fitness())
             self.worst.append()
 
             self.selected = select(self.gene)
