@@ -7,6 +7,7 @@ class Page:
         self.window = None
         self.last_x = None
         self.last_y = None
+        self.my_values = None
 
         self.break_flag = "BREAK"
         self.stable_flag = "STABLE"
@@ -30,6 +31,7 @@ class Page:
 
     def loop_funcs(self):
         event, values = self.window.read()
+        self.my_values = values
         if event == sg.WIN_CLOSED or event == "Exit" or event is None:#プログラム自体を終了
             return self.break_flag
 
@@ -55,3 +57,6 @@ class Page:
     
     def get_stable_flag(self):
         return self.stable_flag
+
+    def get_next_page_names(self):
+        return self.next_page_names
