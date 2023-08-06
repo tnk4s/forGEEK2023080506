@@ -171,7 +171,7 @@ class InsertCalendarv2:
             for j in range(len(self.num_tasks_list)):
                 if base_table[j][i] == 1:
                     task_num += 1
-                    ttt.append(i)
+                    ttt.append(j)
                 if task_num >= 2:
                     hind = task_num -1
                     buf = 0
