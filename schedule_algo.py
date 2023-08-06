@@ -16,7 +16,7 @@ class Iden:
         for i in range(self.plan_num):
             self.gene.append(self.IC.generate_plan())
         self.gene = np.array(self.gene)
-        self.AT = ActiveTime()
+        self.AT = np.random.randint(0, 2, self.gene.shape[2])#ActiveTime()
         kisota, eal = self.IC.kiso_table_2()
         #print(kisota.shape)
         self.PS = np.tile(kisota, (self.plan_num, 1, 1))

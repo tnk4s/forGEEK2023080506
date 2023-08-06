@@ -33,7 +33,7 @@ class MySchedule:
         cur.close()
         conn.close()
 
-    def insert_dummy(self):#for debag
+    def insert_dummy(self):  # for debag
         '''
         task_list = [#(master_id, title, due_date, id, exe_date, detail)
             (202308051821, "task00", datetime.datetime.fromisoformat('2023-12-05T23:59:59'), 0, datetime.datetime.fromisoformat('2023-12-04T20:15:00'), "Hello World"),
@@ -43,13 +43,19 @@ class MySchedule:
             (202308060909, "task01", datetime.datetime.fromisoformat('2023-12-04T23:59:59'), 0, None , "test detail str"),
             (202308060909, "task01", datetime.datetime.fromisoformat('2023-12-04T23:59:59'), 1, None, "test detail str")
         ]'''
-        task_list = [#(master_id, title, due_date, id, exe_date, detail)
-            (202308061821, "cal_test0", datetime.datetime.fromisoformat('2023-12-05T23:59:59'), 0, datetime.datetime.fromisoformat('2023-08-04T20:15:00'), "Hello World"),
-            (202308061821, "cal_test0", datetime.datetime.fromisoformat('2023-12-05T23:59:59'), 1, datetime.datetime.fromisoformat('2023-08-04T20:30:00'), "Hello World"),
-            (202308061821, "cal_test0", datetime.datetime.fromisoformat('2023-12-05T23:59:59'), 2, datetime.datetime.fromisoformat('2023-08-05T08:00:00'), "Hello World"),
-            (202308061821, "cal_test0", datetime.datetime.fromisoformat('2023-12-05T23:59:59'), 3, datetime.datetime.fromisoformat('2023-08-05T08:15:00'), "Hello World"),
-            (202308090909, "task03", datetime.datetime.fromisoformat('2023-12-04T23:59:59'), 0,    datetime.datetime.fromisoformat('2023-08-05T08:15:00') , "test detail str"),
-            (202308090909, "task03", datetime.datetime.fromisoformat('2023-12-04T23:59:59'), 1,    datetime.datetime.fromisoformat('2023-08-05T08:15:00'), "test detail str")
+        task_list = [  # (master_id, title, due_date, id, exe_date, detail)
+            (202308061821, "cal_test0", datetime.datetime.fromisoformat('2023-12-05T23:59:59'), 0,
+             datetime.datetime.fromisoformat('2023-08-04T20:15:00'), "Hello World"),
+            (202308061821, "cal_test0", datetime.datetime.fromisoformat('2023-12-05T23:59:59'), 1,
+             datetime.datetime.fromisoformat('2023-08-04T20:30:00'), "Hello World"),
+            (202308061821, "cal_test0", datetime.datetime.fromisoformat('2023-12-05T23:59:59'), 2,
+             datetime.datetime.fromisoformat('2023-08-05T08:00:00'), "Hello World"),
+            (202308061821, "cal_test0", datetime.datetime.fromisoformat('2023-12-05T23:59:59'), 3,
+             datetime.datetime.fromisoformat('2023-08-05T08:15:00'), "Hello World"),
+            (202308090909, "task03", datetime.datetime.fromisoformat('2023-12-04T23:59:59'), 0,
+             datetime.datetime.fromisoformat('2023-08-05T08:15:00'), "test detail str"),
+            (202308090909, "task03", datetime.datetime.fromisoformat('2023-12-04T23:59:59'), 1,
+             datetime.datetime.fromisoformat('2023-08-05T08:15:00'), "test detail str")
         ]
         self.insert_sch(task_list)
 
@@ -97,6 +103,23 @@ class MySchedule:
         conn.close()
 
         return df
+
+    def delete_shcs(self, mid, task_name):
+        conn = sqlite3.connect(self.db_name)
+        cur = conn.cursor()
+
+        sstr = "DELETE FROM " + self.table_name + " WHERE master_id='" + mid + "' AND title='" + task_name + "'"
+        print(sstr)
+        try:
+            cur.execute(sstr)
+            print("do")
+
+        except sqlite3.Error as e:
+            print("error",e.args[0])
+        conn.commit()
+
+        cur.close()
+        conn.close()
 
 if __name__ == "__main__":
     db_system = MySchedule()
