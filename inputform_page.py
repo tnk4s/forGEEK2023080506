@@ -3,6 +3,7 @@ import PySimpleGUI as sg
 
 from page import Page
 from my_schedule_2 import MySchedule
+from schedule_algo import Iden
 
 class InputFormPage(Page):
     def __init__(self, page_name, next_pages, main_window_flag):
@@ -11,6 +12,7 @@ class InputFormPage(Page):
         months = [str(i) for i in range(1, 13)]
         days = [str(i) for i in range(1, 32)]
         self.db_system = MySchedule()
+
 
         self.this_layout = [
             [sg.Text(self.page_name)],
@@ -51,7 +53,11 @@ class InputFormPage(Page):
         for i in range(task_part):
             self.db_system.insert_sch([(master_id, self.outputs["name"], self.outputs["hizuke"], i, None, self.outputs["detail"])])
 
-        
+        #遺伝的アルゴリズムを実行
+        generation = 30
+        IA = Iden(generation)
+        IA.run_genetic_algorithm()
+
         self.window['user'].update('')
         self.window['name'].update('')
         self.window['year'].update('')
