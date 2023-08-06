@@ -90,6 +90,19 @@ class MySchedule:
         conn.close()
 
         return df
+    
+    def get_shcs_after(self, start_datetime)
+        conn = sqlite3.connect(self.db_name)
+        cur = conn.cursor()
+
+        sstr = "SELECT * FROM " + self.table_name + " WHERE due_date > '" + start_datetime + "'"
+        
+        df = pd.read_sql(sstr, conn)
+
+        cur.close()
+        conn.close()
+
+        return df
 
     def delete_shcs(self, mid, task_name):
         conn = sqlite3.connect(self.db_name)
