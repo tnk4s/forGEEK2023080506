@@ -10,13 +10,13 @@ from page import Page
 class OneDayPlanPage(Page):
     def __init__(self, page_name, next_pages, main_window_flag):
         super().__init__(page_name, next_pages, main_window_flag)
-        header = ['masterid', 'タスク名', '期限', 'id', '予定日', '詳細']
-        width = [10, 10, 10, 10, 10, 10]
+        header = ['タスク名', '期限','詳細']
+        width = [15, 20, 30]
         years = [str(i) for i in range(2022, 2031)]
         months = [str(i) for i in range(1, 13)]
         days = [str(i) for i in range(1, 32)]
         self.schedule = []
-        self.graph = sg.Graph((1200, 300), (0, 0), (1440, 1440), background_color="#7f7f7f")
+        self.graph = sg.Graph((1200, 300), (0, 0), (1500, 1500), background_color="#7f7f7f")
         self.db_system = MySchedule()
         frame1 = sg.Frame('入力フォーム', [[sg.Text(self.page_name)],
              [sg.Text('日付指定'), sg.Combo(years, size=(10, 5), key='-YEAR-'), sg.Text('年'), sg.Combo(months, size=(10, 5), key='-MONTH-'), sg.Text('月'), sg.Combo(days, size=(10, 5), key='-DATE-'), sg.Text('日')],
@@ -43,7 +43,7 @@ class OneDayPlanPage(Page):
         cur.close()
         conn.close()
         # df = self.db_system.get_shcs('Alice', do_date=f"'{do_date}'")
-        schedule = df.values.tolist()
+        schedule = df[['title', 'due_date', 'detail']].values.tolist()
         unique_task = df['title'].unique()
         # それぞれのタスクの時間，数
         task_start_list = []
@@ -63,8 +63,6 @@ class OneDayPlanPage(Page):
             task_count.append(len(tmp_df))
             task_start_list.append(tmp_df['exe_date'][0].split()[1])
 
-        print(start_time)
-        print(task_count)
 
         
 
@@ -72,6 +70,19 @@ class OneDayPlanPage(Page):
 
 
         task_time = np.array(task_count) * 15
+        time_split = np.arange(0, 1441, 60)
+
+    
+        for x in time_split:
+            self.graph.draw_line((x, 1440), (x, 0))
+            self.graph.draw_text(f"{str(x/60)}", (x, 1400))
+
+
+        for start, length, task_name, task_start in zip(start_time, task_time, unique_task, task_start_list):
+            self.graph.draw_rectangle((start, 1140),(start+length, 950), fill_color="#505050", line_color="#606060", line_width=1)
+            self.graph.draw_text(f"{task_name}", (start, 1100), color="#eeeeee", text_location=sg.TEXT_LOCATION_LEFT)
+            self.graph.draw_text(f"{task_start}~", (start, 1000), color="#eeeeee", text_location=sg.TEXT_LOCATION_LEFT)
+         
         
         # self.graph.draw_rectangle((480, 1140),(540, 1000), fill_color="#505050", line_color="#606060", line_width=1)
         for start, length, task_name, task_start in zip(start_time, task_time, unique_task, task_start_list):
