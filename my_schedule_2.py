@@ -123,8 +123,8 @@ class MySchedule:
 
 if __name__ == "__main__":
     db_system = MySchedule()
-    #db_system.create_table()
-    #db_system.insert_dummy()
+    db_system.create_table()
+    db_system.insert_dummy()
     #db_system.update_shcs(202308051821, 3 ,'2023-12-05 09:30:00')
     #rs = db_system.get_shcs('2023-12-05%')
     #db_system.delete_shcs("202308051821", "task00")
