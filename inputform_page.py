@@ -2,6 +2,8 @@ import datetime
 import PySimpleGUI as sg
 
 from page import Page
+from my_schedule_2 import MySchedule
+from schedule_algo import Iden
 
 class InputFormPage(Page):
     def __init__(self, page_name, next_pages, main_window_flag):
@@ -9,6 +11,8 @@ class InputFormPage(Page):
         years = [str(i) for i in range(2023, 2031)]
         months = [str(i) for i in range(1, 13)]
         days = [str(i) for i in range(1, 32)]
+        self.db_system = MySchedule()
+
 
         self.this_layout = [
             [sg.Text(self.page_name)],
@@ -34,11 +38,26 @@ class InputFormPage(Page):
         self.outputs = {
             "user" : self.my_values['user'],
             "name" : self.my_values['name'],
-            "hizuke":hizuke.isoformat(), 
+            "hizuke":str(hizuke.isoformat()) + " 23:59:59", 
             "detail" : self.my_values['detail'],
             "time" : str(self.my_values['time'])
         }
-        
+        master_id = str(datetime.datetime.now()).replace("-", "").replace(" ", "").replace(":", "")[0:12] #202308051821 とか
+        print("insert master_id:", master_id)
+        print("self.outputs:", self.outputs)
+
+        task_part = int((int(self.outputs["time"]) * 60) / 15)
+        if ((int(self.outputs["time"]) * 60) % 15) > 0:
+            task_part += 1
+        print("task_part:", task_part)
+        for i in range(task_part):
+            self.db_system.insert_sch([(master_id, self.outputs["name"], self.outputs["hizuke"], i, None, self.outputs["detail"])])
+
+        #遺伝的アルゴリズムを実行
+        generation = 30
+        IA = Iden(generation)
+        IA.run_genetic_algorithm()
+
         self.window['user'].update('')
         self.window['name'].update('')
         self.window['year'].update('')

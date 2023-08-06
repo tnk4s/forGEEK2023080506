@@ -5,12 +5,12 @@ from dummy_page import DummyPage
 
 if __name__ == "__main__":
     pages ={
-        "INPUT_FORM" : InputFormPage("INPUT_FORM", ["CALENDER"], True),
+        "INPUT_FORM" : InputFormPage("INPUT_FORM", ["DAILY_TASKS"], True),
         "CALENDER" : CalenderPage("CALENDER", ["INPUT_FORM", "DAILY_TASKS"], True),#keyとページインスタンスの第一引数は同じものを推奨
-        "DAILY_TASKS" : OneDayPlanPage("DAILY_TASKS", ["CALENDER"], True)
+        "DAILY_TASKS" : OneDayPlanPage("DAILY_TASKS", ["INPUT_FORM"], True)
     } 
         
-    base_window = "INPUT_FORM"
+    base_window = "DAILY_TASKS"
     window = pages[base_window]#初期ページを設定
     window.wake_up_window()
     while True:
