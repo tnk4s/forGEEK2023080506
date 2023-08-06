@@ -125,7 +125,7 @@ class InsertCalendarv2:
                     self.kiso_table_exist[num][exist_num] = 1
                 num += 1
 
-        #print(self.duetimelist)
+        print(self.duetimelist2)
         self.base_table = self.kiso_table_exist.copy()
 
     def generate_plan(self) -> np.ndarray:
@@ -180,13 +180,12 @@ class InsertCalendarv2:
                         base_table[j][ttt[n]] = 0
                         s = ttt.pop(n)
                         # 削除した分追加
-                        for k in range(len(self.due_mass_list[s])):
-                            buf1 = 0
-                            while buf1 < 1:
-                                nn = np.random.randint(0, self.due_mass_list[s])
-                                if base_table[s][nn] ==0:
-                                    base_table[s][nn] = 1
-                                    buf += 1
+                        buf1 = 0
+                        while buf1 < 1:
+                            nn = np.random.randint(0, self.due_mass_list[s])
+                            if base_table[s][nn] ==0:
+                                base_table[s][nn] = 1
+                                buf1 += 1
                         buf += 1
 
         # タスクの数を調整
