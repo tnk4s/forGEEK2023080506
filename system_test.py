@@ -12,12 +12,12 @@ class Iden:
         for i in range(self.plan_num):
             self.gene.append(self.IC.generate_plan())
         self.gene = np.array(self.gene)
-        kisota, eal = self.IC.kiso_table_2()
+        kisota, self.eal = self.IC.kiso_table_2()
         #print(eal)
         core_time = []
-        time_index = []
+        self.time_index = []
         for i in range(self.gene.shape[2]):
-            time_index.append(eal)
+            self.time_index.append(self.eal)
             if 10 <= eal.hour <17:
                 core_time.append(1)
             else:
@@ -126,8 +126,9 @@ class Iden:
         fitness = self.calc_fitness(gene)
         max_index = np.argsort(fitness)[::-1][0]
         print(gene[max_index, :, :])
+        print(self.eal)
 
-        return gene[max_index, :, :]
+        return gene[max_index, :, :], self.eal, self.time_index
 
 generation = 30
 IA = Iden(generation)
