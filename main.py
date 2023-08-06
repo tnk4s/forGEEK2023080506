@@ -10,7 +10,7 @@ if __name__ == "__main__":
         "DAILY_TASKS" : OneDayPlanPage("DAILY_TASKS", ["CALENDER"], True)
     } 
         
-    base_window = "INPUT_FORM"
+    base_window = "CALENDER"
     window = pages[base_window]#初期ページを設定
     window.wake_up_window()
     while True:
