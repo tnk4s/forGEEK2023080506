@@ -16,9 +16,19 @@ class Iden:
         for i in range(self.plan_num):
             self.gene.append(self.IC.generate_plan())
         self.gene = np.array(self.gene)
-        self.AT = np.random.randint(0, 2, self.gene.shape[2])#ActiveTime()
-        kisota, eal = self.IC.kiso_table_2()
-        #print(kisota.shape)
+        kisota, self.eal = self.IC.kiso_table_2()
+        #print(eal)
+        core_time = []
+        self.time_index = []
+        for i in range(self.gene.shape[2]):
+            self.time_index.append(self.eal)
+            if 10 <= eal.hour <17:
+                core_time.append(1)
+            else:
+                core_time.append(0)
+            eal += datetime.timedelta(minutes=15)
+
+        self.AT = core_time
         self.PS = np.tile(kisota, (self.plan_num, 1, 1))
         #print(self.PS.shape)
         self.generation = generation
@@ -113,12 +123,17 @@ class Iden:
                 genoms[i, :, :] = self.crossover(p1, p2)
 
             gene = self.mutaion(genoms, 0.01, 0.2)
+
+            for i in range(gen_num):
+                self.IC.table_fix(gene[i, :, :])
         
         fitness = self.calc_fitness(gene)
         max_index = np.argsort(fitness)[::-1][0]
         print(gene[max_index, :, :])
+        print(self.eal)
 
-        return gene[max_index, :, :]
+        return gene[max_index, :, :], self.eal, self.time_index
+
 
 if __name__ == "__main__":
     generation = 30

@@ -56,7 +56,9 @@ class InputFormPage(Page):
         #遺伝的アルゴリズムを実行
         generation = 30
         IA = Iden(generation)
-        IA.run_genetic_algorithm()
+        onehot_sch, start_datetime = IA.run_genetic_algorithm()
+        exe_dates = self.__make_exedate(onehot_sch, start_datetime)
+
 
         self.window['user'].update('')
         self.window['name'].update('')
@@ -68,4 +70,10 @@ class InputFormPage(Page):
 
         super().leave()
         return self.next_page_names[0]
+    
+    def __make_exedate(self, onehot_sch, start_datetime):
+        #ここで書く行がどのタスクに対応してるか取得??
+        #exedateへ変換
+        pass
+
     

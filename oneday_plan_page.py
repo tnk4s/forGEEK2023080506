@@ -20,7 +20,7 @@ class OneDayPlanPage(Page):
         self.db_system = MySchedule()
         frame1 = sg.Frame('入力フォーム', [[sg.Text(self.page_name)],
              [sg.Text('日付指定'), sg.Combo(years, size=(10, 5), key='-YEAR-'), sg.Text('年'), sg.Combo(months, size=(10, 5), key='-MONTH-'), sg.Text('月'), sg.Combo(days, size=(10, 5), key='-DATE-'), sg.Text('日')],
-            [sg.Button('送信', key = self.submit_button_func), sg.Button('終了', key = self.go_back)]],size=(1200, 100))
+            [sg.Button('タスク入力', key = self.submit_button_func), sg.Button('終了', key = self.go_back)]],size=(1200, 100))
 
         frame2 = sg.Frame('計画表', [[sg.Table(self.schedule, headings=header, col_widths=width, key='-TABLE-',  font=('Arial',20), def_col_width=20, auto_size_columns=False, vertical_scroll_only=False)]], size=(1200, 300))
         frame3 = sg.Frame('ガントチャート', [[self.graph]], size=(1200, 300))
