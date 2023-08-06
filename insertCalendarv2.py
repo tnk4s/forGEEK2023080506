@@ -3,6 +3,7 @@ import datetime
 from datetime import datetime
 import pandas as pd
 import numpy as np
+import random
 
 import my_schedule_2 as ms
 # from raise_Error_list import TimeError
@@ -13,20 +14,18 @@ class InsertCalendarv2:
         self.db_system = ms.MySchedule()
         rs = self.db_system.get_shcs()
         self.rs = pd.DataFrame(rs).to_numpy()
-        #print(self.rs)
+        # print(self.rs)
 
         # タスクの個数
         self.num_tasks = len(self.rs)
 
         # タスクの入力日時取得
-        nowtimelist =  []
+        nowtimelist = []
         for task in range(self.num_tasks):
             nowtimelist.append(self.rs[task][0])
         earliest = max(nowtimelist)
-        earliest = str((earliest // 10) * 10)
-
+        earliest = str((earliest // 10) * 10 + 10)
         earliest = datetime.strptime(earliest, "%Y%m%d%H%M")
-
         last_day = calendar.monthrange(earliest.year, earliest.month)[1]
 
         # エラー対策
@@ -41,7 +40,8 @@ class InsertCalendarv2:
 
         # タスクの締め切り日時取得
         self.duetimelist = []
-        self.duetimelist2 = []
+        self.duetimelist2 = [] #各タスクの締切日str
+
         for task in range(self.num_tasks):
             duedate = self.rs[task][2]
             duedate = duedate.replace("-", "")
@@ -75,11 +75,12 @@ class InsertCalendarv2:
 
         num_mass = (finaldeadline - earliest).total_seconds() / 60
         num_mass = int(-(-num_mass // res)) #マスの数
-
+        #print(num_mass)
         # すでに予定が入ってるものたち　及び，タスクが何分割されてるか数える
         self.exist_plan_list = []
         self.exist_plan_list2 = []
         self.num_tasks_list = []
+        self.due_mass_list = []  # 各タスクの締め切りマス
         num = -1
         for task in range(self.num_tasks):
             hisnum_mass = str(self.rs[task][4])
@@ -97,6 +98,10 @@ class InsertCalendarv2:
             # タスクの分割数を保存
             if self.rs[task][3] == 0:
                 self.num_tasks_list.append(1)
+                due_mass = (self.duetimelist[task] - earliest).total_seconds() / 60
+                due_mass = int(-(-due_mass // res))  # マスの数
+                self.due_mass_list.append(due_mass)
+                #print(self.due_mass_list)
                 # 新規タスク0，元々あるタスク1
                 if self.rs[task][4] is None:
                     self.exist_plan_list2.append(0)
@@ -107,6 +112,7 @@ class InsertCalendarv2:
             else:
                 self.num_tasks_list[num] += 1
 
+        #print(f"タスクごとの回数self.num_tasks_list: {self.num_tasks_list}")
         # 入力日から最終締切日までの15分刻み分基礎テーブル作成
         self.kiso_table = np.zeros((len(self.num_tasks_list), num_mass))
         self.kiso_table_exist = self.kiso_table.copy()
@@ -119,6 +125,7 @@ class InsertCalendarv2:
                     self.kiso_table_exist[num][exist_num] = 1
                 num += 1
 
+        #print(self.duetimelist)
         self.base_table = self.kiso_table_exist.copy()
 
     def generate_plan(self) -> np.ndarray:
@@ -147,7 +154,7 @@ class InsertCalendarv2:
         for i in range(len(self.num_tasks_list)):
             for j in range(base_table.shape[1]):
                 if base_table[i][j] == 1:
-                    if j > self.duetimelist2[i]:
+                    if j > int(self.duetimelist2[i]):
                         base_table[i][j] = 0
                         buf = 0
                         while buf < 1:
@@ -157,19 +164,20 @@ class InsertCalendarv2:
                                 buf += 1
 
         # 同じタイミングで二つ以上のタスクが入ってる場合どっちか削除
+        #print(base_table.shape)
         for i in range(base_table.shape[1]):
             task_num = 0
             ttt = []
             for j in range(len(self.num_tasks_list)):
-                if base_table[i][j] == 1:
+                if base_table[j][i] == 1:
                     task_num += 1
-                    ttt.append(j)
+                    ttt.append(i)
                 if task_num >= 2:
                     hind = task_num -1
                     buf = 0
                     while buf < hind:
                         n = np.random.randint(0, len(ttt))
-                        base_table[i][ttt[n]] = 0
+                        base_table[j][ttt[n]] = 0
                         s = ttt.pop(n)
                         # 削除した分追加
                         for k in range(len(self.duetimelist2[s])):
@@ -180,6 +188,32 @@ class InsertCalendarv2:
                                     base_table[s][nn] = 1
                                     buf += 1
                         buf += 1
+
+        # タスクの数を調整
+        s_num = np.sum(base_table, axis=1)
+        for i in range(len(self.num_tasks_list)):
+            for j in range(base_table.shape[1]):
+                if s_num[i] > self.num_tasks_list[i]:
+                    lalaland = []
+                    for jj in range(base_table.shape[1]):
+                        if base_table[i][jj] == 1:
+                            lalaland.append(jj)
+                    hind = s_num[i] - self.num_tasks_list[i]
+                    buf = 0
+                    while buf < hind:
+                        n = random.choice(lalaland)
+                        base_table[i][n] = 0
+                        buf += 1
+
+                if s_num[i] < self.num_tasks_list[i]:
+                    hind = self.num_tasks_list[i] - s_num[i]
+                    buf = 0
+                    while buf < hind:
+                        n = np.random.randint(0, self.due_mass_list)
+                        if base_table[i][n] == 0:
+                            base_table[i][n] = 1
+                            buf += 1
+
         return base_table
 
     def kiso_table_2(self):
