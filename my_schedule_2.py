@@ -91,7 +91,7 @@ class MySchedule:
 
         return df
     
-    def get_shcs_after(self, start_datetime)
+    def get_shcs_after(self, start_datetime):
         conn = sqlite3.connect(self.db_name)
         cur = conn.cursor()
 
