@@ -147,7 +147,7 @@ class InsertCalendarv2:
         for i in range(len(self.num_tasks_list)):
             for j in range(base_table.shape[1]):
                 if base_table[i][j] == 1:
-                    if j > self.duetimelist2[i]:
+                    if j > int(self.duetimelist2[i]):
                         base_table[i][j] = 0
                         buf = 0
                         while buf < 1:
@@ -161,15 +161,15 @@ class InsertCalendarv2:
             task_num = 0
             ttt = []
             for j in range(len(self.num_tasks_list)):
-                if base_table[i][j] == 1:
+                if base_table[j][i] == 1:
                     task_num += 1
-                    ttt.append(j)
+                    ttt.append(i)
                 if task_num >= 2:
                     hind = task_num -1
                     buf = 0
                     while buf < hind:
                         n = np.random.randint(0, len(ttt))
-                        base_table[i][ttt[n]] = 0
+                        base_table[j][ttt[n]] = 0
                         s = ttt.pop(n)
                         # 削除した分追加
                         for k in range(len(self.duetimelist2[s])):

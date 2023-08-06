@@ -35,12 +35,12 @@ class MySchedule:
 
     def insert_dummy(self):#fro debag
         task_list = [#(master_id, title, due_date, id, exe_date, detail)
-            (202308051821, "task00", datetime.datetime.fromisoformat('2022-12-05T23:59:59'), 0, datetime.datetime.fromisoformat('2023-12-04T20:15:00'), "Hello World"),
-            (202308051821, "task00", datetime.datetime.fromisoformat('2022-12-05T23:59:59'), 1, datetime.datetime.fromisoformat('2023-12-04T20:30:00'), "Hello World"),
-            (202308051821, "task00", datetime.datetime.fromisoformat('2022-12-05T23:59:59'), 2, datetime.datetime.fromisoformat('2023-12-05T08:00:00'), "Hello World"),
-            (202308051821, "task00", datetime.datetime.fromisoformat('2022-12-05T23:59:59'), 3, datetime.datetime.fromisoformat('2023-12-05T08:15:00'), "Hello World"),
-            (202308060909, "task01", datetime.datetime.fromisoformat('2022-12-04T23:59:59'), 0, None , "test detail str"),
-            (202308060909, "task01", datetime.datetime.fromisoformat('2022-12-04T23:59:59'), 1, None, "test detail str")
+            (202308051821, "task00", datetime.datetime.fromisoformat('2023-08-15T23:59:59'), 0, datetime.datetime.fromisoformat('2023-08-14T20:15:00'), "Hello World"),
+            (202308051821, "task00", datetime.datetime.fromisoformat('2023-08-15T23:59:59'), 1, datetime.datetime.fromisoformat('2023-08-14T20:30:00'), "Hello World"),
+            (202308051821, "task00", datetime.datetime.fromisoformat('2023-08-15T23:59:59'), 2, datetime.datetime.fromisoformat('2023-08-14T08:00:00'), "Hello World"),
+            (202308051821, "task00", datetime.datetime.fromisoformat('2023-08-15T23:59:59'), 3, datetime.datetime.fromisoformat('2023-08-15T08:15:00'), "Hello World"),
+            (202308060909, "task01", datetime.datetime.fromisoformat('2023-08-16T23:59:59'), 0, None, "test detail str"),
+            (202308060909, "task01", datetime.datetime.fromisoformat('2023-08-16T23:59:59'), 1, None, "test detail str")
         ]
         self.insert_sch(task_list)
     
@@ -77,8 +77,8 @@ class MySchedule:
 
 if __name__ == "__main__":
     db_system = MySchedule()
-    #db_system.create_table()
-    #db_system.insert_dummy()
+    db_system.create_table()
+    db_system.insert_dummy()
     #db_system.update_shcs(202308051821, 3 ,'2023-12-05 09:30:00')
     rs = db_system.get_shcs('2023-12-05%')
     #rs = db_system.get_shcs()
